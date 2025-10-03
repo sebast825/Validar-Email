@@ -6,55 +6,12 @@ import threading
 from collections import defaultdict
 import time
 import pandas as pd
+from verificarEmail import verificar_email
 
 ARCHIVO_EMAILS = "emails.txt"
 NUM_THREADS = 10
 DELAY_ENTRE_EMAILS = 1  # Segundos
 
-def verificar_email(email):
-    try:
-        # Validación sintáctica
-        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
-            return (email, "❌ Sintaxis inválida")
-
-        dominio = email.split('@')[1]
-        
-        # DNS - MX con reintentos
-        try:
-            mx_records = dns.resolver.resolve(dominio, 'MX', lifetime=10)
-            mx_servers = [mx.exchange.to_text() for mx in mx_records]
-        except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
-            return (email, "❌ Dominio no existe")
-        except dns.resolver.Timeout:
-            return (email, "⚠️ Timeout DNS")
-        except dns.resolver.NoNameservers:
-            return (email, "⚠️ Servidores DNS no responden")
-
-        # Intentar todos los MX
-        for mx in mx_servers:
-            try:
-                with smtplib.SMTP(mx, timeout=10) as server:
-                    server.helo('mi-dominio.com')
-                    server.mail('sender@mi-dominio.com')
-                    code, _ = server.rcpt(email)
-                    server.quit()  # Cierre limpio
-
-                    if code == 250:
-                        return (email, "✅ Válido")
-                    elif 400 <= code < 500:
-                        return (email, f"⚠️ Error temporal ({code})")
-                    else:
-                        continue  # Próximo MX
-
-            except smtplib.SMTPConnectError:
-                continue  # Falló este MX, probar siguiente
-            except Exception as e:
-                return (email, f"⚠️ Error SMTP: {str(e)}")
-
-        return (email, "⚠️ Todos los MX fallaron")
-
-    except Exception as e:
-        return (email, f"⚠️ Error inesperado: {str(e)}")
 
 def validar_emails(emails):
     resultados = []
@@ -86,8 +43,17 @@ def validar_emails(emails):
 # Resto del código se mantiene igual (leer_emails, generar_reporte, main)
 # Leer emails desde archivo .txt
 def leer_emails(archivo):
+    emails = []
     with open(archivo, 'r') as f:
-        return [line.strip() for line in f if line.strip()]
+        for line in f:
+            line = line.strip()
+            if line:
+                # Dividir por ";" y luego limpiar cada segmento
+                for segment in line.split(';'):
+                    cleaned_segment = segment.strip()
+                    if cleaned_segment:  # Ignorar segmentos vacíos
+                        emails.append(cleaned_segment)
+    return emails
 
 # Estadísticas y resultados
 def generar_reporte(resultados):
@@ -126,8 +92,17 @@ def exportar_a_excel(resultados):
         summary.to_excel(writer, sheet_name="Resumen", index=False)
         
         # Hojas por estado
+        used_sheets = set()  # Para evitar nombres repetidos
         for estado in df["Estado"].unique():
             sheet_name = clean_sheet_name(estado)
+            original_name = sheet_name
+            counter = 1
+            # Si ya existe, agregamos un sufijo incremental
+            while sheet_name in used_sheets:
+                sheet_name = f"{original_name}_{counter}"
+                counter += 1
+            used_sheets.add(sheet_name)
+
             df[df["Estado"] == estado].to_excel(
                 writer, 
                 sheet_name=sheet_name, 
