@@ -7,6 +7,8 @@ from collections import defaultdict
 import time
 import pandas as pd
 from verificarEmail import verificar_email
+from newVerificarEmail import verificar_email_combinado
+from ExportData.ExcelExport import exportar_a_excel
 
 ARCHIVO_EMAILS = "emails.txt"
 NUM_THREADS = 10
@@ -20,7 +22,7 @@ def validar_emails(emails):
     def worker(batch):
         for email in batch:
             with lock:
-                resultado = verificar_email(email.strip())
+                resultado = verificar_email_combinado(email.strip())
                 resultados.append(resultado)
             time.sleep(DELAY_ENTRE_EMAILS)
 
@@ -74,51 +76,6 @@ def generar_reporte(resultados):
         print(f"{estado}: {len(emails)} emails")
 
 
-def exportar_a_excel(resultados):
-    # Limpia caracteres inválidos en nombres de hojas
-    def clean_sheet_name(name):
-        invalid_chars = [':', '\\', '/', '?', '*', '[', ']']
-        for char in invalid_chars:
-            name = name.replace(char, ' ')
-        return name.strip()[:31]  # Corta a 31 caracteres
-
-    df = pd.DataFrame(resultados, columns=["Email", "Estado"])
-    
-    # Crear Excel
-    with pd.ExcelWriter("reporte.xlsx") as writer:
-        # Hoja resumen
-        summary = df["Estado"].value_counts().reset_index()
-        summary.columns = ["Estado", "Cantidad"]
-        summary.to_excel(writer, sheet_name="Resumen", index=False)
-        
-        # Hojas por estado
-        used_sheets = set()  # Para evitar nombres repetidos
-        for estado in df["Estado"].unique():
-            sheet_name = clean_sheet_name(estado)
-            original_name = sheet_name
-            counter = 1
-            # Si ya existe, agregamos un sufijo incremental
-            while sheet_name in used_sheets:
-                sheet_name = f"{original_name}_{counter}"
-                counter += 1
-            used_sheets.add(sheet_name)
-
-            df[df["Estado"] == estado].to_excel(
-                writer, 
-                sheet_name=sheet_name, 
-                index=False
-            )
-    
-    print("✔ Reporte exportado a 'reporte.xlsx'")
-def exportar_todo_en_una_hoja(resultados):
-    """
-    Exporta todos los emails con su estado en una sola hoja de Excel llamada 'Todos los Emails'.
-    """
-    df = pd.DataFrame(resultados, columns=["Email", "Estado"])
-    
-    with pd.ExcelWriter("reporte.xlsx", engine="openpyxl", mode="a") as writer:
-        df.to_excel(writer, sheet_name="Todos los Emails", index=False)
-    print("✔ Reporte exportado a 'reporte_todos.xlsx'")
 
 
 # Ejecución
@@ -131,7 +88,6 @@ if __name__ == "__main__":
     resultados = validar_emails(emails)
     generar_reporte(resultados)
     exportar_a_excel(resultados)
-    exportar_todo_en_una_hoja(resultados)
     end_time = time.perf_counter()
     elapsed = end_time - start_time
     print(f"\n⏱️ Tiempo total: {elapsed:.2f} segundos")
