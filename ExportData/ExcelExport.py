@@ -1,5 +1,5 @@
 import pandas as pd
-
+import os
 # --- Función de utilidad ---
 def clean_sheet_name(name: str) -> str:
     """
@@ -37,17 +37,23 @@ def crear_hojas_por_estado(df: pd.DataFrame, writer: pd.ExcelWriter):
             counter += 1
         used_sheets.add(sheet_name)
 
-        df[df["Estado"] == estado][["Email", "Detalle"]].to_excel(
+        df[df["Estado"] == estado][["Email", "Estado","Detalle"]].to_excel(
             writer,
             sheet_name=sheet_name,
             index=False
         )
 
 # --- Función principal ---
-def exportar_a_excel(resultados, archivo="../Reports/reporte.xlsx"):
+def exportar_a_excel(resultados):
     """
     Exporta resultados de emails a Excel con hoja resumen y hojas por estado.
     """
+      # Obtener la carpeta del script actual
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    archivo = "reports/reporte.xlsx"
+    # Crear carpeta 'Reports' dentro de la raíz del proyecto (una carpeta arriba del script)
+    carpeta = os.path.join(script_dir, "..", "Reports")
+    os.makedirs(carpeta, exist_ok=True)
     df = pd.DataFrame(resultados, columns=["Email", "Estado", "Detalle"])
     
     with pd.ExcelWriter(archivo, engine="openpyxl") as writer:
