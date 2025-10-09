@@ -85,8 +85,9 @@ if __name__ == "__main__":
     print(f"Leyendo emails desde {ARCHIVO_EMAILS}...")
     emails = leer_emails(ARCHIVO_EMAILS)
     print(f"Validando {len(emails)} emails con {NUM_THREADS} hilos...")
-    resultados = validar_emails(emails)
-    generar_reporte(resultados)
+
+    resultados = [(email, *verificar_email_combinado(email.strip())) for email in emails]
+    #generar_reporte(resultados)
     exportar_a_excel(resultados)
     end_time = time.perf_counter()
     elapsed = end_time - start_time
