@@ -3,13 +3,14 @@ import dns.resolver
 import smtplib
 import socket
 import random
+import time
 
 EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 ROLE_BASED_PREFIXES = {"info", "support", "admin", "sales", "contact"}
 DISPOSABLE_DOMAINS = {"mailinator.com", "10minutemail.com", "guerrillamail.com"}
 
 def verificar_email_combinado(email, sender="verifier@mi-dominio.com", helo_domain="mi-dominio.com",
-                              dns_timeout=10, smtp_timeout=10,smtp_retries=2, retry_delay=5):
+                              dns_timeout=10, smtp_timeout=10,smtp_retries=1, retry_delay=5):
     """
     Verifica un email combinando validaciones DNS y SMTP.
     Retorna: (status, reason)
