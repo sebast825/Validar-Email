@@ -110,6 +110,16 @@ def exportar_a_excel(resultados):
             )
     
     print("✔ Reporte exportado a 'reporte.xlsx'")
+def exportar_todo_en_una_hoja(resultados):
+    """
+    Exporta todos los emails con su estado en una sola hoja de Excel llamada 'Todos los Emails'.
+    """
+    df = pd.DataFrame(resultados, columns=["Email", "Estado"])
+    
+    with pd.ExcelWriter("reporte.xlsx", engine="openpyxl", mode="a") as writer:
+        df.to_excel(writer, sheet_name="Todos los Emails", index=False)
+    print("✔ Reporte exportado a 'reporte_todos.xlsx'")
+
 
 # Ejecución
 if __name__ == "__main__":
@@ -121,7 +131,7 @@ if __name__ == "__main__":
     resultados = validar_emails(emails)
     generar_reporte(resultados)
     exportar_a_excel(resultados)
-
+    exportar_todo_en_una_hoja(resultados)
     end_time = time.perf_counter()
     elapsed = end_time - start_time
     print(f"\n⏱️ Tiempo total: {elapsed:.2f} segundos")
