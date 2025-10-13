@@ -15,34 +15,6 @@ NUM_THREADS = 10
 DELAY_ENTRE_EMAILS = 1  # Segundos
 
 
-def validar_emails(emails):
-    resultados = []
-    lock = threading.Lock()
-
-    def worker(batch):
-        for email in batch:
-            with lock:
-                resultado = verificar_email_combinado(email.strip())
-                resultados.append(resultado)
-            time.sleep(DELAY_ENTRE_EMAILS)
-
-    # Distribución exacta de emails
-    batch_size = (len(emails) // NUM_THREADS) + 1
-    batches = [emails[i:i + batch_size] for i in range(0, len(emails), batch_size)]
-
-    threads = []
-    for batch in batches:
-        if batch:
-            thread = threading.Thread(target=worker, args=(batch,))
-            threads.append(thread)
-            thread.start()
-
-    for thread in threads:
-        thread.join()
-
-    return resultados
-
-# Resto del código se mantiene igual (leer_emails, generar_reporte, main)
 # Leer emails desde archivo .txt
 def leer_emails(archivo):
     emails = []
@@ -57,23 +29,6 @@ def leer_emails(archivo):
                         emails.append(cleaned_segment)
     return emails
 
-# Estadísticas y resultados
-def generar_reporte(resultados):
-    estadisticas = defaultdict(list)
-    for email, estado in resultados:
-        estadisticas[estado].append(email)
-    
-    print("\n--- REPORTE FINAL ---")
-    for estado, emails in estadisticas.items():
-        print(f"\n{estado} ({len(emails)}):")
-        for email in emails[:3]:  # Muestra solo 3 ejemplos por categoría
-            print(f"  - {email}")
-        if len(emails) > 3:
-            print(f"  ... y {len(emails) - 3} más")
-    
-    print("\n📊 RESUMEN:")
-    for estado, emails in estadisticas.items():
-        print(f"{estado}: {len(emails)} emails")
 
 
 
@@ -87,7 +42,6 @@ if __name__ == "__main__":
     print(f"Validando {len(emails)} emails con {NUM_THREADS} hilos...")
 
     resultados = [(email, *verificar_email_combinado(email.strip())) for email in emails]
-    #generar_reporte(resultados)
     exportar_a_excel(resultados)
     end_time = time.perf_counter()
     elapsed = end_time - start_time
