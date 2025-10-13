@@ -1,31 +1,33 @@
-📧 Validador de Emails (SMTP/DNS)
+# Validador de Emails (SMTP/DNS)
 
 Herramienta Python para verificar la validez de direcciones de email mediante:
-✅ Sintaxis (regex)
-✅ DNS (registros MX)
-✅ SMTP (comprobación de buzón real)
 
-Características clave
-Multihilo: Procesamiento paralelo con N hilos.
+- Sintaxis (regex)
+- DNS (registros MX)
+- SMTP (comprobación de buzón real)
+- Catch-All (Detecta si el dominio acepta todos los emails aunque no existan, lo que indica posibles resultados poco fiables)
 
-Tolerante a fallos: Manejo de errores DNS/SMTP (timeouts, bloqueos antispam).
+## Características clave
+- Multihilo: Procesamiento paralelo con N hilos.
 
-Reportes:
+- Tolerante a fallos: Manejo de errores DNS/SMTP (timeouts, bloqueos antispam).
 
-Resumen estadístico en terminal.
+## Reportes
 
-Exportación a Excel con pestañas por estado.
+- Resumen estadístico en terminal.
 
-Optimizado: Delays configurables para evitar bloqueos (Gmail/Outlook).
+- Exportación a Excel con pestañas por estado.
+
+- Optimizado: Delays configurables para evitar bloqueos (Gmail/Outlook).
 
 ------------------------------------------------------------------------------------------------
-Como usar la app:
+## Como usar la app
 
-Crear un archivo emails.txt que tenga un email por linea, al correr el programa aanalizara uno por uno
+- Crear un archivo emails.txt que tenga un email por linea, al correr el programa aanalizara uno por uno
 
 --------------------------------------------------------------------------------------------------
 
-Explicación de cada resultado:
+## Explicación de cada resultado
 
 ✅ Válido
 Los emails existen y el servidor MX aceptó la dirección.
