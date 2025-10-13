@@ -1,3 +1,4 @@
+
 # Validador de Emails (SMTP/DNS)
 
 Herramienta Python para verificar la validez de direcciones de email mediante:
@@ -31,17 +32,16 @@ Validar-Email/
 ```
 
 ## Características clave
-- Multihilo: Procesamiento paralelo con N hilos.
 
+- Multihilo: Procesamiento paralelo con N hilos.
 - Tolerante a fallos: Manejo de errores DNS/SMTP (timeouts, bloqueos antispam).
+ > ⚠️ La verificación SMTP puede no completarse para algunos servidores, especialmente si se ejecuta desde una IP domiciliaria. Esto es normal y no indica un error en la aplicación.
 
 ## Reportes
 
 - Resumen estadístico en terminal.
-
 - Exportación a Excel con pestañas por estado.
 
-- Optimizado: Delays configurables para evitar bloqueos (Gmail/Outlook).
 
 ## Como usar la app
 
