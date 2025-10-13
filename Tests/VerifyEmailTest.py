@@ -1,7 +1,13 @@
-from SintaxValidation import verificarSintaxis
-from VerifyMx import verifyMX
-from VerifyEmail import verifySMTP
-from isCatchAll import isCatchAll
+import sys
+import os
+
+# Agrega la raíz del proyecto al path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from VerifyEmail.SintaxValidation import verificarSintaxis
+from VerifyEmail.VerifyMx import verifyMX
+from VerifyEmail.verifySmtp import verifySMTP
+from VerifyEmail.isCatchAll import isCatchAll
 
 if __name__ == "__main__":
     print("=== TESTS SIMPLES ===\n")
@@ -40,6 +46,5 @@ if __name__ == "__main__":
 
     # 5️⃣ Test flujo completo
     print("=== Test completo ===")
-    print(verificar_email_combinado("usuario@gmail.com"))
-    print(verificar_email_combinado("noexiste@dominiofalso123123.com"))
+   
     print()

@@ -7,6 +7,8 @@ from collections import defaultdict
 import time
 import pandas as pd
 from ExportData.ExcelExport import exportar_a_excel
+from ExportData.ConsoleMetrics import generar_reporte_consola
+
 from VerifyEmail.VerifyEmail import verificar_email
 
 ARCHIVO_EMAILS = "emails.txt"
@@ -40,6 +42,7 @@ if __name__ == "__main__":
     print(f"Validando {len(emails)} emails con {NUM_THREADS} hilos...")
 
     resultados = [(email, *verificar_email(email.strip())) for email in emails]
+    generar_reporte_consola(resultados)
     exportar_a_excel(resultados)
     end_time = time.perf_counter()
     elapsed = end_time - start_time

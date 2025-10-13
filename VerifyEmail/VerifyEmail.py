@@ -2,7 +2,7 @@
 
 from .SintaxValidation import verificarSintaxis
 from .VerifyMx import verifyMX
-from .verifySmpt import verifySMTP
+from .verifySmtp import verifySMTP
 from .isCatchAll import isCatchAll
 
 def verificar_email(email, sender="verifier@mi-dominio.com", helo_domain="mi-dominio.com",
