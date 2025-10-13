@@ -80,3 +80,18 @@ El formato del email no cumple con usuario@dominio.extensión (ej: usuario@.com)
 ⚠️ Errores temporales (450/454)
 450: "Mailbox busy" → Intenta más tarde.
 454: "Temporary authentication failure" → Problema de configuración del servidor.
+
+## Instrucciones de ejecución
+
+### La App
+```bash
+python main.py
+
+```
+
+### Los Tests
+
+```bash
+python Tests/VerifyEmailTest.py
+
+```
