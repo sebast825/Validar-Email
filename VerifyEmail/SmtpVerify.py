@@ -2,7 +2,7 @@ import socket
 import smtplib
 import time
 
-def verifySMTP(email, mx_servers, sender, smtp_timeout, smtp_retries, retry_delay):
+def SmtpVerify(email, mx_servers, sender, smtp_timeout, smtp_retries, retry_delay):
     last_error = None
     for mx in mx_servers:
         attempt = 1

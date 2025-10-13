@@ -5,7 +5,7 @@ ROLE_BASED_PREFIXES = {"info", "support", "admin", "sales", "contact"}
 DISPOSABLE_DOMAINS = {"mailinator.com", "10minutemail.com", "guerrillamail.com"}
 
 
-def verificarSintaxis(email):
+def SyntaxValidation(email):
     if not EMAIL_REGEX.match(email or ""):
         return "invalid", "bad_syntax", None, None
 

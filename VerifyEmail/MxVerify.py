@@ -1,7 +1,7 @@
 import dns.resolver
 
 
-def verifyMX(domain_lower, dns_timeout):
+def MxVerify(domain_lower, dns_timeout):
     try:
         mx_records = dns.resolver.resolve(domain_lower, "MX", lifetime=dns_timeout)
         mx_servers = sorted([r.exchange.to_text().rstrip(".") for r in mx_records])
