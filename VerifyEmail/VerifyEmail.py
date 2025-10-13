@@ -1,9 +1,9 @@
 
 
-from SintaxValidation import verificarSintaxis
-from VerifyMx import verifyMX
-from verifySmpt import verifySMTP
-from isCatchAll import isCatchAll
+from .SintaxValidation import verificarSintaxis
+from .VerifyMx import verifyMX
+from .verifySmpt import verifySMTP
+from .isCatchAll import isCatchAll
 
 def verificar_email(email, sender="verifier@mi-dominio.com", helo_domain="mi-dominio.com",
                               dns_timeout=10, smtp_timeout=10, smtp_retries=1, retry_delay=5):
@@ -28,4 +28,4 @@ def verificar_email(email, sender="verifier@mi-dominio.com", helo_domain="mi-dom
     return verifySMTP(email, mx_servers, sender, smtp_timeout, smtp_retries, retry_delay)
 
 
-verificar_email("buenusamedicos@hotmail.com")
+#verificar_email("buenusamedicos@hotmail.com")

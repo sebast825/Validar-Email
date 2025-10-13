@@ -6,13 +6,11 @@ import threading
 from collections import defaultdict
 import time
 import pandas as pd
-from verificarEmail import verificar_email
-from newVerificarEmail import verificar_email_combinado
 from ExportData.ExcelExport import exportar_a_excel
+from VerifyEmail.VerifyEmail import verificar_email
 
 ARCHIVO_EMAILS = "emails.txt"
 NUM_THREADS = 10
-DELAY_ENTRE_EMAILS = 1  # Segundos
 
 
 # Leer emails desde archivo .txt
@@ -41,7 +39,7 @@ if __name__ == "__main__":
     emails = leer_emails(ARCHIVO_EMAILS)
     print(f"Validando {len(emails)} emails con {NUM_THREADS} hilos...")
 
-    resultados = [(email, *verificar_email_combinado(email.strip())) for email in emails]
+    resultados = [(email, *verificar_email(email.strip())) for email in emails]
     exportar_a_excel(resultados)
     end_time = time.perf_counter()
     elapsed = end_time - start_time
