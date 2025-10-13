@@ -7,6 +7,29 @@ Herramienta Python para verificar la validez de direcciones de email mediante:
 - SMTP (comprobación de buzón real)
 - Catch-All (Detecta si el dominio acepta todos los emails aunque no existan, lo que indica posibles resultados poco fiables)
 
+```
+Validar-Email/
+├─ ExportData/
+│  ├─ ConsoleMetrics.py
+│  └─ ExcelExport.py
+├─ Reports/
+│  ├─ .gitkeep
+│  └─ reporte.xlsx
+├─ Tests/
+│  └─ VerifyEmailTest.py
+├─ VerifyEmail/
+│  ├─ isCatchAll.py
+│  ├─ SintaxValidation.py
+│  ├─ VerifyEmail.py
+│  ├─ VerifyMx.py
+│  └─ verifySmtp.py
+├─ .gitattributes
+├─ .gitignore
+├─ emails.txt
+├─ main.py
+└─ README.md
+```
+
 ## Características clave
 - Multihilo: Procesamiento paralelo con N hilos.
 
@@ -20,12 +43,10 @@ Herramienta Python para verificar la validez de direcciones de email mediante:
 
 - Optimizado: Delays configurables para evitar bloqueos (Gmail/Outlook).
 
-------------------------------------------------------------------------------------------------
 ## Como usar la app
 
 - Crear un archivo emails.txt que tenga un email por linea, al correr el programa aanalizara uno por uno
 
---------------------------------------------------------------------------------------------------
 
 ## Explicación de cada resultado
 
