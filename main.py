@@ -9,7 +9,7 @@ import pandas as pd
 from ExportData.ExcelExport import exportar_a_excel
 from ExportData.ConsoleMetrics import generar_reporte_consola
 
-from VerifyEmail.VerifyEmail import verificar_email
+from VerifyEmail.EmailValidation import emailValidation
 
 ARCHIVO_EMAILS = "emails.txt"
 NUM_THREADS = 10
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     emails = leer_emails(ARCHIVO_EMAILS)
     print(f"Validando {len(emails)} emails con {NUM_THREADS} hilos...")
 
-    resultados = [(email, *verificar_email(email.strip())) for email in emails]
+    resultados = [(email, *emailValidation(email.strip())) for email in emails]
     generar_reporte_consola(resultados)
     exportar_a_excel(resultados)
     end_time = time.perf_counter()
